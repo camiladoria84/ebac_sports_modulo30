@@ -1,43 +1,34 @@
-import { Produto as ProdutoType } from '../../App'
-import * as S from './styles'
+import React from 'react'
+import { Produto } from '../../types'
+import ProdutoComponent from '../Produto/ProdutoComponent'
+import { FavoritesState } from '../../slices/favoritesSlice'
 
 type Props = {
-  produto: ProdutoType
-  aoComprar: (produto: ProdutoType) => void
-  favoritar: (produto: ProdutoType) => void
-  estaNosFavoritos: boolean
+  produtos: Produto[]
+  adicionarAoCarrinho: (produto: Produto) => void
+  favoritos: FavoritesState
+  favoritar: (produto: Produto) => void
 }
 
-export const paraReal = (valor: number) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-    valor
-  )
-
-const ProdutoComponent = ({
-  produto,
-  aoComprar,
-  favoritar,
-  estaNosFavoritos
+const Produtos = ({
+  produtos,
+  adicionarAoCarrinho,
+  favoritos,
+  favoritar
 }: Props) => {
   return (
-    <S.Produto>
-      <S.Capa>
-        <img src={produto.imagem} alt={produto.nome} />
-      </S.Capa>
-      <S.Titulo>{produto.nome}</S.Titulo>
-      <S.Prices>
-        <strong>{paraReal(produto.preco)}</strong>
-      </S.Prices>
-      <S.BtnComprar onClick={() => favoritar(produto)} type="button">
-        {estaNosFavoritos
-          ? '- Remover dos favoritos'
-          : '+ Adicionar aos favoritos'}
-      </S.BtnComprar>
-      <S.BtnComprar onClick={() => aoComprar(produto)} type="button">
-        Adicionar ao carrinho
-      </S.BtnComprar>
-    </S.Produto>
+    <div>
+      {produtos.map((produto) => (
+        <ProdutoComponent
+          key={produto.id}
+          produto={produto}
+          adicionarAoCarrinho={adicionarAoCarrinho}
+          favoritar={favoritar}
+          estaNosFavoritos={favoritos.some((fav) => fav.id === produto.id)}
+        />
+      ))}
+    </div>
   )
 }
 
-export default ProdutoComponent
+export default Produtos
