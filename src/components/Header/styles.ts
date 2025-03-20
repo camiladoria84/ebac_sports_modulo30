@@ -32,6 +32,11 @@ export const Header = styled.header`
 
     span {
       color: ${cores.corFundo};
+      margin-right: 16px;
+    }
+
+    span:last-child {
+      margin-right: 0;
     }
   }
 
